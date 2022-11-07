@@ -11,18 +11,6 @@ export const AuthContext = createContext({
 function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
 
-  useEffect(() => {
-    // here we verify is a token was stored in the phone, to "prelogging"
-    // the user.
-    async function fetchToken() {
-      const storedToken = await AsyncStorage.getItem('token');
-      if (storedToken) {
-        setAuthToken(storedToken);
-      }
-    }
-    fetchToken();
-  }, [])
-
   function authenticate(token) {
     setAuthToken(token);
     // store token on the device
@@ -33,6 +21,8 @@ function AuthContextProvider({ children }) {
 
   function logOut() {
     setAuthToken(null);
+    // When logging out , we remove the token from the phone
+    AsyncStorage.removeItem("token");
   }
 
   const value = {
