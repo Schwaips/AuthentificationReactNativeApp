@@ -7,27 +7,26 @@ export const AuthContext = createContext({
   logout: () => {}, // change context if logout
 });
 
-
-function AuthContextProvider({children}) {
+function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
 
   function authenticate(token) {
     setAuthToken(token);
+    // store toekn on the device
   }
 
   function logOut() {
-    setAuthToken(null)
+    setAuthToken(null);
   }
 
   const value = {
     token: authToken,
     isAuthenticated: !!authToken,
     authenticate: authenticate,
-    logOut: logOut, // expose method to any part of the app that want to work with context.
-  }
+    logout: logOut, // expose method to any part of the app that want to work with context.
+  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
 
 export default AuthContextProvider;
