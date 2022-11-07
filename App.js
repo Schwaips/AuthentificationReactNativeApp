@@ -43,7 +43,6 @@ function AuthenticatedStack() {
 function Navigation() {
   const authContext = useContext(AuthContext);
 
-  if (authContext.isAuthenticated)
     return (
       <NavigationContainer>
         {!authContext.isAuthenticated && <AuthStack />}
