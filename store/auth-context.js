@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AuthContext = createContext({
   token: "",
@@ -10,9 +11,24 @@ export const AuthContext = createContext({
 function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
 
+  useEffect(() => {
+    // here we verify is a token was stored in the phone, to "prelogging"
+    // the user.
+    async function fetchToken() {
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+        setAuthToken(storedToken);
+      }
+    }
+    fetchToken();
+  }, [])
+
   function authenticate(token) {
     setAuthToken(token);
-    // store toekn on the device
+    // store token on the device
+    // first argument is a key name, second argument is the value of the key.
+    // Second argument needs to be a string.
+    AsyncStorage.setItem('token', token)
   }
 
   function logOut() {
